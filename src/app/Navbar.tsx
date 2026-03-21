@@ -1,41 +1,19 @@
-import { Avatar, ButtonLink, CreatePostButton, SearchBar } from 'components/UI'
-import { MobileNav, NavbarDropDown } from 'components/layout'
+'use client';
+import React from 'react';
+import Link from 'next/link';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { LogoutButton } from 'components/auth'
-import { getUSerData } from 'utils/useUser'
-import { useUser } from 'utils/useUser'
-
-async function Navbar() {
-  const user = useUser()
-  const userData = await getUSerData()
-
+export default function Navbar() {
   return (
-    <>
-      <nav className="py-2 px-6 border-b border-zinc-200 hidden w-full sm:fixed sm:top-0 sm:z-20 bg-white sm:flex sm:flex-row sm:items-center ">
-        <Link href={'/'} className="flex items-center gap-3 flex-grow   ">
-          <Image src={'/Logo.png'} width={115} height={32} alt={'logo'} />
-        </Link>
-
-        <div className="flex flex-grow items-center flex-row justify-center">
-          <SearchBar />
+    <nav className="p-4 bg-black border-b border-cyan-900 flex justify-between items-center">
+      <Link href="/" className="text-cyan-400 font-bold text-xl tracking-tighter">
+        OIO ONE
+      </Link>
+      <div className="flex items-center gap-4 text-white">
+        <Link href="/create" className="hover:text-cyan-400 transition-colors">Criar</Link>
+        <div className="w-9 h-9 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-sm font-bold shadow-lg shadow-cyan-900/20">
+          M
         </div>
-        <div className="flex flex-row items-center justify-end gap-4 flex-grow">
-          {user ? (
-            <>
-              <CreatePostButton />
-              <Avatar user={userData} />
-              <NavbarDropDown />
-            </>
-          ) : (
-            <ButtonLink href={'/account/login'}>Log in</ButtonLink>
-          )}
-        </div>
-      </nav>
-      <MobileNav />
-    </>
-  )
+      </div>
+    </nav>
+  );
 }
-
-export default Navbar
