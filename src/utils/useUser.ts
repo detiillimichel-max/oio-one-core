@@ -1,10 +1,11 @@
+'use client';
 import { useState, useEffect } from 'react';
 
 export function useUser() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Simulação de usuário para o app carregar
+    // Usuário Michel configurado como autor do OIO ONE
     setUser({ id: '1', name: 'Michel - OIO ONE', photo: '' });
   }, []);
 
