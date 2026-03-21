@@ -1,39 +1,23 @@
 "use client";
 import React from 'react';
 
-export default function Home() {
+export default function CreatePage() {
   return (
-    <main style={{ 
-      backgroundColor: '#000', 
-      height: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      color: '#00e5ff',
-      fontFamily: 'sans-serif'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '3rem', margin: '0' }}>OIO ONE</h1>
-        <div style={{ 
-          width: '80px', 
-          height: '80px', 
-          backgroundColor: '#00e5ff', 
-          borderRadius: '50%', 
-          margin: '20px auto',
-          boxShadow: '0 0 30px #00e5ff',
-          animation: 'pulse 2s infinite'
-        }}></div>
-        <p style={{ color: '#fff', fontSize: '1.2rem' }}>Sincronizando Motor Municipal...</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
+      <div className="w-full max-w-md bg-zinc-900 rounded-xl p-8 border border-zinc-800 shadow-2xl">
+        <h1 className="text-2xl font-bold text-cyan-400 mb-6 text-center">OIO ONE - Nova Vibe</h1>
+        
+        <div className="border-2 border-dashed border-zinc-700 rounded-lg p-10 flex flex-col items-center gap-4 hover:border-cyan-500 transition-colors cursor-pointer">
+          <span className="text-4xl">🎬</span>
+          <p className="text-zinc-400 text-sm">Selecione um vídeo de até 30s</p>
+          <button className="bg-white text-black px-6 py-2 rounded-full font-bold text-sm">Escolher Arquivo</button>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-4">
+          <input type="text" placeholder="Legenda da sua Vibe..." className="bg-zinc-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none" />
+          <button className="w-full bg-cyan-500 text-black font-bold py-3 rounded-lg shadow-[0_0_15px_rgba(0,229,255,0.4)]">Publicar no Emotion</button>
+        </div>
       </div>
-      
-      <style jsx global>{`
-        @keyframes pulse {
-          0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
-          70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(0, 229, 255, 0); }
-          100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
-        }
-      `}</style>
-    </main>
+    </div>
   );
 }
