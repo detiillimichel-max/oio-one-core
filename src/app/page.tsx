@@ -1,40 +1,46 @@
-'use client';
-import React from 'react';
+import InfiniteFeed from 'components/feed/InfiniteFeed'
+import { Post } from 'types'
+import { api_Url } from 'utils/consts'
 
-export default function HomePage() {
+// OIO ONE - Camada Sensorial (Feed de Mídia 70% Topo)
+async function HomePage() {
+  // Michel, carregamos os dados do autor (Identity Layer)
+  // O revalidate: 60 garante o desempenho de app profissional
+  const posts = (await fetch(`${api_Url}collections/posts/records?expand=profile&sort=-created`, {
+    next: { revalidate: 60 }
+  }).then((res) => res.json()))?.items as Post[]
+
   return (
-    <div className="bg-black min-h-screen text-white p-6 flex flex-col items-center justify-center font-sans">
-      {/* O Círculo de Identidade OIO ONE */}
-      <div className="w-48 h-48 bg-cyan-950 rounded-full flex items-center justify-center mb-8 border-4 border-cyan-500 shadow-[0_0_50px_rgba(6,182,212,0.3)] animate-pulse">
-        <h1 className="text-[120px] font-black text-cyan-400 leading-none">O</h1>
-      </div>
+    // CAMADA SENSORIAL: Ocupa 100% da tela com o vídeo, fundo preto puro.
+    // O pb-[30vh] cria o espaço para a Gaveta de Identidade (30% inferior).
+    <main className="relative z-10 w-full h-screen bg-black overflow-hidden scrollbar-hide">
+      
+      {/* OIO ONE - Identidade em Profundidade */}
+      <div className="flex flex-col h-full w-full">
+        {/* Módulos de Acoplamento (Área onde os vídeos se encaixam) */}
+        <div className="relative flex-grow bg-zinc-950 border-t border-zinc-800/40 rounded-t-[40px] shadow-inner overflow-hidden">
+          {/* Feed de Vídeo Infinito (70% - Estilo Social Grande) */}
+          <InfiniteFeed initialPosts={posts} />
+        </div>
 
-      {/* Título e Conceito */}
-      <h2 className="text-5xl font-bold tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-white to-cyan-500">
-        OIO ONE
-      </h2>
-      <p className="text-xl text-cyan-200/80 mb-10 font-light">
-        Interface Orgânica por Profundidade
-      </p>
-
-      {/* Painel de Controle do Autor */}
-      <div className="mt-6 p-8 border border-cyan-800/50 rounded-3xl bg-cyan-950/10 max-w-md text-center backdrop-blur-sm">
-        <p className="text-base text-gray-300 leading-relaxed">
-          Olá, <span className="text-cyan-400 font-bold">Michel</span>! ✨<br />
-          O seu projeto está oficialmente <strong className="text-green-400 underline decoration-2 underline-offset-4">PRONTO PARA DECOLAR</strong> na Vercel. 
-        </p>
-        
-        <div className="mt-8 flex gap-4 justify-center">
-          <div className="px-4 py-2 bg-cyan-900/30 rounded-full border border-cyan-500/30 text-xs text-cyan-300">
-            Autor: detillimichel-max
-          </div>
+        {/* Espaço reservado para a Gaveta de Vidro (30%) que vamos costurar depois */}
+        <div className="h-[30vh] w-full bg-black/40 backdrop-blur-xl border-t border-zinc-800/40 rounded-t-[40px]">
+          {/* A Gaveta de Chat/Identidade (image_2.png) se encaixa aqui por profundidade */}
         </div>
       </div>
+      
+      {/* SALTO QUÂNTICO: Miniaturas de Navegação Rápida */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        {[1, 2, 3].map((i) => (
+          <div 
+            key={i} 
+            className="w-1.5 h-1.5 bg-zinc-800 rounded-full transition-all hover:h-6 hover:bg-zinc-500 cursor-pointer"
+          />
+        ))}
+      </div>
 
-      {/* Rastro do Motor */}
-      <p className="mt-12 text-[10px] text-zinc-600 tracking-[0.3em] uppercase">
-        Powered by Vercel & Michel Detilli
-      </p>
-    </div>
-  );
+    </main>
+  )
 }
+
+export default HomePage
