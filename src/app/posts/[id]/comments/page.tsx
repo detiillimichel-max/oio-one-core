@@ -4,15 +4,20 @@ import { Post } from 'types'
 import { api_Url } from 'utils/consts'
 import DeleteButton from './DeleteButton'
 import { useUser } from 'utils/useUser'
+
+// Michel, aqui a gente define o tipo de PageProps do jeito que a Vercel exige agora
 type PageProps = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
   children?: React.ReactNode
 }
 
 async function Page({ params }: PageProps) {
-  const postId = params.id
+  // AQUI ESTÁ A MÁGICA: A gente espera o params carregar para pegar o ID
+  const resolvedParams = await params
+  const postId = resolvedParams.id
+  
   const user = useUser()
   const userId = user?.model?.id || ''
 
@@ -22,6 +27,7 @@ async function Page({ params }: PageProps) {
 
   return (
     <div className="flex flex-col gap-6 relative">
+      {/* OIO ONE - Identidade do Autor no Topo */}
       <div className="flex gap-4 items-center">
         <Avatar user={post.expand.profile} size={56} />
         <div className="flex-grow">
@@ -33,9 +39,15 @@ async function Page({ params }: PageProps) {
         <Date date={post.created} />
         {post.expand.profile.id == userId && <DeleteButton postId={post.id} />}
       </div>
+      
       <p>{post.caption}</p>
-      <div className="w-full bg-zinc-200 h-[1px]"></div>
+      
+      <div className="w-full bg-zinc-800 h-[1px]"></div>
+      
+      {/* Aqui a função que você não quer perder: Comentários Infinitos */}
       <InfiniteComments postId={postId} />
+      
+      <p className="text-[10px] text-zinc-600 text-center">OIO ONE - Autor: Michel</p>
     </div>
   )
 }
