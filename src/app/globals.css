@@ -34,3 +34,30 @@ body {
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
+/* OIO ONE - Animações de Toque (Espuminha) */
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes ripple-btn {
+  0% { transform: scale(0); opacity: 0.3; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.animate-ripple {
+  animation: ripple 400ms ease-out forwards;
+}
+
+.animate-ripple-btn {
+  animation: ripple-btn 300ms ease-out forwards;
+}
+
+/* Esconder barras de rolagem para parecer App nativo */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
