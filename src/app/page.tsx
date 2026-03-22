@@ -1,46 +1,40 @@
-import InfiniteFeed from 'components/feed/InfiniteFeed'
-import { Post } from 'types'
-import { api_Url } from 'utils/consts'
+'use client';
 
-// OIO ONE - Camada Sensorial (Feed de Mídia 70% Topo)
-async function HomePage() {
-  // Michel, carregamos os dados do autor (Identity Layer)
-  // O revalidate: 60 garante o desempenho de app profissional
-  const posts = (await fetch(`${api_Url}collections/posts/records?expand=profile&sort=-created`, {
-    next: { revalidate: 60 }
-  }).then((res) => res.json()))?.items as Post[]
+import React from 'react';
 
+export default function HomePage() {
   return (
-    // CAMADA SENSORIAL: Ocupa 100% da tela com o vídeo, fundo preto puro.
-    // O pb-[30vh] cria o espaço para a Gaveta de Identidade (30% inferior).
-    <main className="relative z-10 w-full h-screen bg-black overflow-hidden scrollbar-hide">
+    <main className="min-h-screen bg-black text-white flex flex-col overflow-hidden">
       
-      {/* OIO ONE - Identidade em Profundidade */}
-      <div className="flex flex-col h-full w-full">
-        {/* Módulos de Acoplamento (Área onde os vídeos se encaixam) */}
-        <div className="relative flex-grow bg-zinc-950 border-t border-zinc-800/40 rounded-t-[40px] shadow-inner overflow-hidden">
-          {/* Feed de Vídeo Infinito (70% - Estilo Social Grande) */}
-          <InfiniteFeed initialPosts={posts} />
+      {/* CAMADA SENSORIAL (70% TOPO) - FEED DE VÍDEO POPEYE */}
+      <section className="relative h-[70vh] w-full bg-zinc-950 flex items-center justify-center">
+        <div className="text-zinc-500 text-sm tracking-tighter">
+          CARREGANDO MÓDULO DE VÍDEO...
         </div>
+        
+        {/* SALTO QUÂNTICO (Lado Direito) */}
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="w-1.5 h-1.5 bg-zinc-600 rounded-full"></div>
+          ))}
+        </div>
+      </section>
 
-        {/* Espaço reservado para a Gaveta de Vidro (30%) que vamos costurar depois */}
-        <div className="h-[30vh] w-full bg-black/40 backdrop-blur-xl border-t border-zinc-800/40 rounded-t-[40px]">
-          {/* A Gaveta de Chat/Identidade (image_2.png) se encaixa aqui por profundidade */}
+      {/* GAVETA DE IDENTIDADE/CHAT (30% INFERIOR) - EFEITO VIDRO */}
+      <section className="h-[30vh] w-full bg-zinc-900/60 backdrop-blur-xl border-t border-zinc-800 p-6">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 rounded-full border-2 border-emerald-500 bg-zinc-800"></div>
+          <div>
+            <h1 className="font-bold text-lg tracking-tighter">Michel Detilli</h1>
+            <p className="text-xs text-emerald-500 font-medium">PROPRIETÁRIO OIO ONE</p>
+          </div>
         </div>
-      </div>
-      
-      {/* SALTO QUÂNTICO: Miniaturas de Navegação Rápida */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
-        {[1, 2, 3].map((i) => (
-          <div 
-            key={i} 
-            className="w-1.5 h-1.5 bg-zinc-800 rounded-full transition-all hover:h-6 hover:bg-zinc-500 cursor-pointer"
-          />
-        ))}
-      </div>
+        
+        <div className="bg-zinc-800/50 rounded-2xl p-3 text-sm text-zinc-400">
+          Sistema OIO CORE Ativo. Aguardando telemetria de registro...
+        </div>
+      </section>
 
     </main>
-  )
+  );
 }
-
-export default HomePage
