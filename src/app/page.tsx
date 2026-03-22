@@ -1,40 +1,97 @@
-'use client';
+'use client'
 
-import React from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react'
+import { useChat } from '@ai-sdk/react'
+import { QuantumDots } from '@/components/oio/quantum-dots'
+import { GlassDrawer } from '@/components/oio/glass-drawer'
 
-export default function HomePage() {
+const SECTION_LABELS = ['OIO ONE CORE', 'OIO MEDIA', 'OIO CONNECT']
+
+export default function OioOneCore() {
+  const [activeSection, setActiveSection] = useState(0)
+  const videoContainerRef = useRef<HTMLDivElement>(null)
+
+  // Removido o transporte padrão para evitar erros de conexão inicial
+  const { messages, append, status } = useChat({
+    api: '/api/chat',
+  })
+
+  const isLoading = status === 'streaming' || status === 'submitted'
+
+  const handleSendMessage = useCallback(async (text: string) => {
+    await append({ content: text, role: 'user' })
+  }, [append])
+
+  const handleNavigate = useCallback((index: number) => {
+    setActiveSection(index)
+    if (videoContainerRef.current) {
+      const sectionHeight = window.innerHeight
+      videoContainerRef.current.scrollTo({
+        top: index * sectionHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    const container = videoContainerRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const scrollTop = container.scrollTop
+      const sectionHeight = window.innerHeight
+      const newIndex = Math.round(scrollTop / sectionHeight)
+      if (newIndex !== activeSection && newIndex >= 0 && newIndex < 3) {
+        setActiveSection(newIndex)
+      }
+    }
+
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [activeSection])
+
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col overflow-hidden">
+    <main className="relative h-screen w-screen bg-black overflow-hidden font-sans tracking-tighter text-white">
       
-      {/* CAMADA SENSORIAL (70% TOPO) - FEED DE VÍDEO POPEYE */}
-      <section className="relative h-[70vh] w-full bg-zinc-950 flex items-center justify-center">
-        <div className="text-zinc-500 text-sm tracking-tighter">
-          CARREGANDO MÓDULO DE VÍDEO...
-        </div>
-        
-        {/* SALTO QUÂNTICO (Lado Direito) */}
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="w-1.5 h-1.5 bg-zinc-600 rounded-full"></div>
-          ))}
-        </div>
-      </section>
+      {/* CAMADA 0 (Z-0): Area de Video Vertical - ROLA POR TRAS */}
+      <div
+        ref={videoContainerRef}
+        className="absolute inset-0 z-0 overflow-y-auto snap-y snap-mandatory"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {[0, 1, 2].map((index) => (
+          <section
+            key={index}
+            className="relative h-screen w-full snap-start snap-always flex items-center justify-center"
+          >
+            {/* Fundo escuro profundo */}
+            <div className="absolute inset-0 bg-zinc-950" />
+            
+            <div className="relative z-10 opacity-20 flex flex-col items-center">
+              <div className="w-24 h-24 border border-zinc-800 rounded-full flex items-center justify-center mb-6">
+                <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-zinc-700 border-b-[12px] border-b-transparent ml-1" />
+              </div>
+              <p className="text-[11px] tracking-[.6em] uppercase text-zinc-500 font-bold">
+                {SECTION_LABELS[index]}
+              </p>
+            </div>
+          </section>
+        ))}
+      </div>
 
-      {/* GAVETA DE IDENTIDADE/CHAT (30% INFERIOR) - EFEITO VIDRO */}
-      <section className="h-[30vh] w-full bg-zinc-900/60 backdrop-blur-xl border-t border-zinc-800 p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-full border-2 border-emerald-500 bg-zinc-800"></div>
-          <div>
-            <h1 className="font-bold text-lg tracking-tighter">Michel Detilli</h1>
-            <p className="text-xs text-emerald-500 font-medium">PROPRIETÁRIO OIO ONE</p>
-          </div>
-        </div>
-        
-        <div className="bg-zinc-800/50 rounded-2xl p-3 text-sm text-zinc-400">
-          Sistema OIO CORE Ativo. Aguardando telemetria de registro...
-        </div>
-      </section>
+      {/* CAMADA 1 (Z-10): Salto Quantico - DOTS FIXOS */}
+      <QuantumDots
+        activeIndex={activeSection}
+        onNavigate={handleNavigate}
+        total={3}
+      />
 
+      {/* CAMADA 2 (Z-20): Gaveta de Vidro - MICHEL */}
+      <GlassDrawer
+        messages={messages}
+        isLoading={isLoading}
+        onSendMessage={handleSendMessage}
+      />
     </main>
-  );
+  )
 }
