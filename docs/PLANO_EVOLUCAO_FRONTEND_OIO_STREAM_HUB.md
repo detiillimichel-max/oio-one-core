@@ -119,6 +119,52 @@ MediaRow
 ↓
 Universal/Native Player
 
+## 6. CONTRATO DE TRABALHO — EDGES COMPARTILHADAS PELOS DOIS APPS
+
+Esta é uma decisão arquitetural oficial do projeto.
+
+**Uma fonte → um tratamento de Edge → vários aplicativos consumidores.**
+
+O tratamento das fontes deve ser feito nas Edges do ecossistema REDESOCIAL-V2 e, quando estabilizado, consumido também pelo OIO Vibe Hub.
+
+### REDESOCIAL-V2
+
+As mesmas Edges alimentam o REDESOCIAL-V2, que apresenta o conteúdo em **feed vertical estilo YouTube Shorts/TikTok**.
+
+### OIO Vibe Hub
+
+As mesmas Edges alimentam o OIO Vibe Hub, que apresenta o conteúdo em **carrosséis por fonte/categoria**.
+
+Fluxo comum:
+
+Fontes
+↓
+Edges tratadas
+↓
+Contrato comum
+↙                         ↘
+REDESOCIAL-V2             OIO Vibe Hub
+↓                         ↓
+Feed vertical             Catálogo
+Shorts/TikTok             Carrosséis
+                          por fonte/categoria
+↓                         ↓
+Player                    Player
+
+### Regra de responsabilidade
+
+**Edge:** buscar, tratar, normalizar, paginar, proteger, aplicar cache/controle da fonte e entregar contrato estável.
+
+**Frontend:** consumir o contrato, organizar a apresentação e controlar a experiência do usuário.
+
+**Não duplicar tratamento de fonte nos dois aplicativos.**
+
+O catálogo único do OIO Vibe Hub será a ponte entre o contrato das Edges e os carrosséis. Ele não deve recriar a lógica de cada API.
+
+### Regra de congelamento
+
+Durante o trabalho do OIO Vibe Hub, as Edges do REDESOCIAL-V2 permanecem congeladas, salvo autorização explícita. Primeiro validamos o tratamento das Edges; depois conectamos o OIO ao contrato existente.
+
 ## 6. SUPABASE
 
 O frontend analisado não depende do cliente @supabase/supabase-js para as funções principais.
